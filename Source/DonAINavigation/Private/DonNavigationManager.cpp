@@ -89,7 +89,7 @@ ADonNavigationManager::ADonNavigationManager(const FObjectInitializer& ObjectIni
 // Debug Helpers:
 static ULineBatchComponent* GetDebugLineBatcher(const UWorld* InWorld, bool bPersistentLines, float LifeTime, bool bDepthIsForeground)
 {
-	return (InWorld ? (bDepthIsForeground ? InWorld->ForegroundLineBatcher : ((bPersistentLines || (LifeTime > 0.f)) ? InWorld->PersistentLineBatcher : InWorld->LineBatcher)) : NULL);
+	return (InWorld ? (bDepthIsForeground ? InWorld->GetLineBatcher(UWorld::ELineBatcherType::Foreground) : ((bPersistentLines || (LifeTime > 0.f)) ? InWorld-> GetLineBatcher(UWorld::ELineBatcherType::WorldPersistent) : InWorld-> GetLineBatcher(UWorld::ELineBatcherType::World))) : NULL);
 }
 
 /* 
@@ -273,6 +273,7 @@ void ADonNavigationManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	{
 		WorkerThread->ShutDown();
 	}
+	Super::EndPlay(EndPlayReason);
 }
 
 void ADonNavigationManager::OnConstruction(const FTransform& Transform)
@@ -2480,7 +2481,7 @@ void ADonNavigationManager::TickScheduledPathfindingTasks(float DeltaSeconds, in
 		auto& data = task.Data;
 
 		// Query timeout?
-		if (data.SolverTimeTaken >= data.QueryParams.QueryTimeout)
+			if (data.SolverTimeTaken >= data.QueryParams.QueryTimeout || data.SolverIterationCount >= data.QueryParams.SolverIterationsLimit)
 		{
 			// Do we at least have the unoptimized solution ready yet? If yes, simply return it! The unoptimized solution is perfectly usable for navigation.
 			if (data.bGoalFound && !data.bGoalOptimized)
@@ -2870,7 +2871,7 @@ FVector ADonNavigationManager::FindRandomPointAroundOriginInNavWorld(AActor* Nav
 				return destinationVolume->Location;
 			}
 		}
-	}
+		}
 
 	return FVector::ZeroVector;
 }

@@ -539,8 +539,17 @@ bool UBTTask_FlyTo::TeleportAndExit(UBehaviorTreeComponent& OwnerComp, bool bWra
 	{
 		FVector flightDestination = blackboard->GetValueAsVector(FlightLocationKey.SelectedKeyName);
 		NavigationManager = UDonNavigationHelper::DonNavigationManagerForActor(pawn);
-
-		bool bLocationValid = !NavigationManager->IsLocationBeneathLandscape(flightDestination);
+		if (NavigationManager)
+		{
+			bTeleportSuccess = false;
+			return false;
+		}
+		bool bLocationValid = false;
+		if (NavigationManager)
+		{
+		 bLocationValid = !NavigationManager->IsLocationBeneathLandscape(flightDestination);
+		}
+		
 		if(bLocationValid)
 		{
 			FVector flightDestination = blackboard->GetValueAsVector(FlightLocationKey.SelectedKeyName);

@@ -227,6 +227,10 @@ struct FDoNNavigationQueryParams
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DoN Navigation")
 	float QueryTimeout = 3.f;
 
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DoN Navigation")
+	int SolverIterationsLimit = 300000;
+
 	/* 
 	*  If enabled, your A.I.'s origin or destination will be slightly nudged to accommodate tricky scenarios where
 	*  your A.I. needs to start or finish its pathfinding flush with a collision body (eg: hiding right next to a wall)
