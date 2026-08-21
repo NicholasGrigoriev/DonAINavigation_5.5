@@ -1098,7 +1098,7 @@ void ADonNavigationManager::DynamicCollisionUpdateForMesh(const FDonMeshIdentifi
 	
 	if (!MeshId.Mesh.IsValid())
 	{
-		UE_LOG(DoNNavigationLog, Error, TEXT("Invalid mesh. Skipping dynamic collision updates..."), *MeshId.UniqueTag.ToString());
+		UE_LOG(DoNNavigationLog, Error, TEXT("Invalid mesh %s. Skipping dynamic collision updates..."), *MeshId.UniqueTag.ToString());
 
 		return;
 	}
@@ -2136,7 +2136,7 @@ bool ADonNavigationManager::SchedulePathfindingTask(AActor* Actor, FVector Desti
 		task.Data.QueryStatus = EDonNavigationQueryStatus::Success;
 		task.ResultHandler.ExecuteIfBound(task.Data);		
 
-		UE_LOG(DoNNavigationLog, Verbose, TEXT("Query for %s, %s solved via simple direct pathing"), *task.Data.GetActorName(), *task.Data.Destination.ToString(), task.Data.SolverTimeTaken);
+		UE_LOG(DoNNavigationLog, Verbose, TEXT("Query for %s, %s solved via simple direct pathing in %.4fs"), *task.Data.GetActorName(), *task.Data.Destination.ToString(), task.Data.SolverTimeTaken);
 
 		return true;
 	}
